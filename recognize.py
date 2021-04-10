@@ -3,19 +3,7 @@ import numpy as np
 from Vision import Vision
 from Controller import Controller
 
-#######   training part    ############### 
-# samples = np.loadtxt('generalsamples_seed.data',np.float32)
-# responses = np.loadtxt('generalresponses_seed.data',np.float32)
-samples = np.loadtxt('generalsamples_divinity.data',np.float32)
-responses = np.loadtxt('generalresponses_divinity.data',np.float32)
-responses = responses.reshape((responses.size,1))
-
-model = cv2.ml.KNearest_create()
-model.train(samples, cv2.ml.ROW_SAMPLE, responses)
-
-############################# testing part  #########################
-
-def recognize(v, coord):
+def recognize(v, coord, model):
     (img, sct_img) = v.take_screenshot(coord)
     cv2.imshow('i', img)
     im = cv2.cvtColor(np.array(img), cv2.COLOR_RGB2BGR)
@@ -58,6 +46,14 @@ def recognize(v, coord):
 # im = cv2.imread('assets/m1.png')
 
 def seed(n):
+    #######   training part    ############### 
+    samples = np.loadtxt('generalsamples_seed.data',np.float32)
+    responses = np.loadtxt('generalresponses_seed.data',np.float32)
+    responses = responses.reshape((responses.size,1))
+
+    model = cv2.ml.KNearest_create()
+    model.train(samples, cv2.ml.ROW_SAMPLE, responses)
+    ### recoognizing ###
     v = Vision()
     i = 0
     save_coord = (1180, 1020)
@@ -65,13 +61,14 @@ def seed(n):
     c = Controller()
 
     while i < n:
-        min_magic_atk = recognize(v, (670, 1180, 20, 20))
-        max_magic_atk = recognize(v, (695, 1180, 20, 20))
-        accuracy = recognize(v, (720, 1180, 20, 20))
+        min_magic_atk = recognize(v, (670, 1180, 20, 20), model)
+        max_magic_atk = recognize(v, (695, 1180, 20, 20), model)
+        accuracy = recognize(v, (720, 1180, 20, 20), model)
         if '+' in min_magic_atk and '+' in max_magic_atk and '+' in accuracy:
             print('saving')
             c.move_mouse(save_coord)
             c.left_mouse_click()
+            time.sleep(1/2)
         else:
             print('refining')
             c.move_mouse(refine_coord)
@@ -80,6 +77,14 @@ def seed(n):
         time.sleep(1/2)
 
 def divinity(n):
+    #######   training part    ############### 
+    samples = np.loadtxt('generalsamples_divinity.data',np.float32)
+    responses = np.loadtxt('generalresponses_divinity.data',np.float32)
+    responses = responses.reshape((responses.size,1))
+
+    model = cv2.ml.KNearest_create()
+    model.train(samples, cv2.ml.ROW_SAMPLE, responses)
+    ### recoognizing ###    
     v = Vision()
     i = 0
     save_coord = (1575, 1000)
@@ -88,18 +93,19 @@ def divinity(n):
 
     while i < n:
         result = ''
-        atk = recognize(v, (600, 1670, 20, 20))
-        p_def = recognize(v, (625, 1670, 20, 20))
-        m_def = recognize(v, (655, 1670, 20, 20))
-        max_hp = recognize(v, (685, 1670, 20, 20))
-        accuracy = recognize(v, (715, 1670, 20, 20))
-        evade = recognize(v, (745, 1670, 20, 20))
+        atk = recognize(v, (600, 1670, 20, 20), model)
+        p_def = recognize(v, (625, 1670, 20, 20), model)
+        m_def = recognize(v, (655, 1670, 20, 20), model)
+        max_hp = recognize(v, (685, 1670, 20, 20), model)
+        accuracy = recognize(v, (715, 1670, 20, 20), model)
+        evade = recognize(v, (745, 1670, 20, 20), model)
         result += atk + p_def + m_def + max_hp + accuracy + evade
 
         if '-' not in result and len(result) > 0:
             print('saving')
             c.move_mouse(save_coord)
             c.left_mouse_click()
+            time.sleep(1/2)
         else:
             print('refining')
             c.move_mouse(refine_coord)
