@@ -77,7 +77,7 @@ def seed(n):
             c.move_mouse(refine_coord)
             c.left_mouse_click()
         i += 1
-        time.sleep(1/5)
+        time.sleep(1/2)
 
 def divinity(n):
     v = Vision()
@@ -107,8 +107,8 @@ def divinity(n):
         i += 1
         time.sleep(1/2)
 
-# seed(2000)
-divinity(378)
+seed(400)
+# divinity(378)
 
 #cv2.imshow('im',im)
 #cv2.imshow('out',out)
