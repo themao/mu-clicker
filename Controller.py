@@ -5,7 +5,9 @@ class Controller:
     def __init__(self):
         self.mouse = MouseController()
 
-    def move_mouse(self, x, y):
+    def move_mouse(self, coord):
+        x = coord[0]
+        y = coord[1]
         def set_mouse_position(x, y):
             self.mouse.position = (int(x), int(y))
         def smooth_move_mouse(from_x, from_y, to_x, to_y, speed=0.2):
