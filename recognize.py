@@ -5,7 +5,7 @@ from Controller import Controller
 
 def recognize(v, coord, model):
     (img, sct_img) = v.take_screenshot(coord)
-    cv2.imshow('i', img)
+    # cv2.imshow('i', img)
     im = cv2.cvtColor(np.array(img), cv2.COLOR_RGB2BGR)
     out = np.zeros(im.shape,np.uint8)
     gray = cv2.cvtColor(im,cv2.COLOR_BGR2GRAY)
@@ -63,7 +63,9 @@ def seed(n):
     while i < n:
         min_magic_atk = recognize(v, (670, 1180, 20, 20), model)
         max_magic_atk = recognize(v, (695, 1180, 20, 20), model)
-        accuracy = recognize(v, (720, 1180, 20, 20), model)
+        accuracy = recognize(v, (745, 1180, 20, 20), model)
+        print(accuracy)
+        return
         if '+' in min_magic_atk and '+' in max_magic_atk and '+' in accuracy:
             print('saving')
             c.move_mouse(save_coord)
@@ -113,8 +115,8 @@ def divinity(n):
         i += 1
         time.sleep(1/2)
 
-seed(400)
-# divinity(378)
+seed(1000)
+# divinity(40)
 
 #cv2.imshow('im',im)
 #cv2.imshow('out',out)
